@@ -37,8 +37,24 @@ El api debe tener un endpoint para manejar las conexiones a la base de datos, el
                 "database": "mydb",
                 "username": "admin",
                 "password": "password",
-                "sql_engine": "postgresql"
-                "security_test": []
+                "sql_engine": "postgresql",
+                "history_test": [
+                    {   
+                        "date": "2021-09-01 12:00:00",
+                        "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+                        "score": 0.5,
+                        "security_tested": [
+                            {
+                                "status": "pass", // pass, fail
+                                "risk": "high", // low, medium, high 
+                                "name": "Fortaleza de contraseña",
+                                "description": "La contraseña es muy debil, se recomienda cambiarla\nSe recomienda usar una contraseña de al menos 8 caracteres, que contenga al menos una letra mayuscula, una letra minuscula, un numero y un caracter especial"
+                            },
+                            ...
+                        ]
+                    },
+                    ...
+                ]
             },
             {
                 "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c" ,
@@ -47,16 +63,8 @@ El api debe tener un endpoint para manejar las conexiones a la base de datos, el
                 "database": "mydb",
                 "username": "admin",
                 "password": "password",
-                "sql_engine": "mysql"
-                "security_test": [
-                    {
-                        "status": "success",
-                        "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
-                        "name": "Fortaleza de contraseña",
-                        "result": "warning",
-                        "description": "La contraseña es muy debil, se recomienda cambiarla\nSe recomienda usar una contraseña de al menos 8 caracteres, que contenga al menos una letra mayuscula, una letra minuscula, un numero y un caracter especial"
-                    },
-                ]
+                "sql_engine": "mysql",
+                "history_test": []
             }
         ]
     }
@@ -72,15 +80,23 @@ El api debe tener un endpoint para manejar las conexiones a la base de datos, el
             "database": "mydb",
             "username": "admin",
             "password": "password",
-            "sql_engine": "postgresql"
-            "security_test": [
-                    {
-                        "status": "success",
+            "sql_engine": "postgresql",
+            "history_test": [
+                    {   
+                        "date": "2021-09-01 12:00:00",
                         "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
-                        "name": "Fortaleza de contraseña",
-                        "result": "warning",
-                        "description": "La contraseña es muy debil, se recomienda cambiarla\nSe recomienda usar una contraseña de al menos 8 caracteres, que contenga al menos una letra mayuscula, una letra minuscula, un numero y un caracter especial"
+                        "score": 0.5,
+                        "security_tested": [
+                            {
+                                "status": "pass", // pass, fail
+                                "risk": "high", // low, medium, high 
+                                "name": "Fortaleza de contraseña",
+                                "description": "La contraseña es muy debil, se recomienda cambiarla\nSe recomienda usar una contraseña de al menos 8 caracteres, que contenga al menos una letra mayuscula, una letra minuscula, un numero y un caracter especial"
+                            },
+                            ...
+                        ]
                     },
+                    ...
                 ]
         }
     }
@@ -98,7 +114,7 @@ El api debe tener un endpoint para manejar las conexiones a la base de datos, el
 
 Otro endpoint debe ser /security_test y debe tener las siguientes funcionalidades:
 
-* /security_test/list (GET) Listar los tests de seguridad, devuelve un json con la lista de tests de seguridad como este:
+* `/security_test/list` (GET) Listar los tests de seguridad, devuelve un json con la lista de tests de seguridad como este:
     ```json
     {
         "security_tests": [
@@ -112,19 +128,31 @@ Otro endpoint debe ser /security_test y debe tener las siguientes funcionalidade
     }
     ```
 
-* /security_test/run (POST) Ejecutar un conjunto de test de seguridad, recibe el id de la conexión, y un arreglo con los id de los test de seguridad a ejecutar, devuelve un json con el resultado de los test de seguridad como este:
+* `/security_test/run` (POST) Ejecutar un conjunto de test de seguridad, recibe el id de la conexión, y un arreglo con los id de los test de seguridad a ejecutar, devuelve un json con el resultado de los test de seguridad como este:
     ```json
-    {   
+    {
+        "date": "2021-09-01 12:00:00",
+        "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
         "score": 0.5,
-        "security_test": [
+        "security_tested": [
             {
-                "status": "success",
-                "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+                "status": "pass", // pass, fail
+                "risk": "high", // low, medium, high 
                 "name": "Fortaleza de contraseña",
-                "result": "warning",
                 "description": "La contraseña es muy debil, se recomienda cambiarla\nSe recomienda usar una contraseña de al menos 8 caracteres, que contenga al menos una letra mayuscula, una letra minuscula, un numero y un caracter especial"
             },
-           ...
+            ...
+        ]
+    }
+    ```
+
+    La entrada de este endpoint debe ser un json como este:
+    ```json
+    {
+        "connection_id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+        "security_tests": [
+            "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+            ...
         ]
     }
     ```
