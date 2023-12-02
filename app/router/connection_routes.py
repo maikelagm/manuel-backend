@@ -6,14 +6,6 @@ from typing import List
 
 connection = APIRouter()
 
-@connection.get("/connections",
-    tags=["connections"],
-    response_model=List[Connection],
-    description="Get a list of all users",
-)
-def get_connections():
-    return conn.execute(Connection.select()).fetchall()
-
 
 @connection.post("/create")
 async def create_db_connection(
@@ -38,7 +30,6 @@ async def create_db_connection(
             db_port=db_port,
             db_name=db_name,
         )
-        new_connection.save()
         return {"status": "success", "db_url": db_url, "db_info": db_info}
 
     else:
