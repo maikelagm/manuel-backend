@@ -1,3 +1,131 @@
 cd ./app/
 
 uvicorn main:app --reload
+
+
+El api debe tener un endpoint para manejar las conexiones a la base de datos, el endpoint sera /connection y debe tener las siguientes funcionalidades:
+
+* `/connection/create` (POST) Crea una conexión a la base de datos, debe recibir los siguientes datos:
+    * Host
+    * Puerto
+    * Base de datos
+    * Usuario
+    * Contraseña
+    * Motor de base de datos SQL (postgresql, mysql, sqlite, oracle, sqlserver)  
+
+    Devuelve un json con el id de la conexión creada como este:
+    ```json
+    {
+        "status": "success",
+        "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+        "db_url": "postgresql://admin:admin@localhost:5433/testdb",
+        "db_info": {
+            "version": "PostgreSQL 12.17, compiled by Visual C++ build 1914, 64-bit",
+            "engine": "120017"
+        }
+    }
+    ```
+
+* `/connection/list` (GET) Listar las conexiones a la base de datos, devuelve un json con la lista de conexiones como este:
+    ```json
+    {
+        "connections": [
+            {
+                "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+                "host": "localhost",
+                "port": 5432,
+                "database": "mydb",
+                "username": "admin",
+                "password": "password",
+                "sql_engine": "postgresql"
+                "security_test": []
+            },
+            {
+                "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c" ,
+                "host": "localhost",
+                "port": 3306,
+                "database": "mydb",
+                "username": "admin",
+                "password": "password",
+                "sql_engine": "mysql"
+                "security_test": [
+                    {
+                        "status": "success",
+                        "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+                        "name": "Fortaleza de contraseña",
+                        "result": "warning",
+                        "description": "La contraseña es muy debil, se recomienda cambiarla\nSe recomienda usar una contraseña de al menos 8 caracteres, que contenga al menos una letra mayuscula, una letra minuscula, un numero y un caracter especial"
+                    },
+                ]
+            }
+        ]
+    }
+    ```
+
+    * `/connection/get` (GET) Obtener una conexión a la base de datos, recibe el id de la conexión y devuelve un json con los datos de la conexión como este:
+    ```json
+    {
+        "connection": {
+            "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+            "host": "localhost",
+            "port": 5432,
+            "database": "mydb",
+            "username": "admin",
+            "password": "password",
+            "sql_engine": "postgresql"
+            "security_test": [
+                    {
+                        "status": "success",
+                        "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+                        "name": "Fortaleza de contraseña",
+                        "result": "warning",
+                        "description": "La contraseña es muy debil, se recomienda cambiarla\nSe recomienda usar una contraseña de al menos 8 caracteres, que contenga al menos una letra mayuscula, una letra minuscula, un numero y un caracter especial"
+                    },
+                ]
+        }
+    }
+    ```
+    
+    * `/connection/delete` (DELETE) Eliminar una conexión a la base de datos dado el id de la conexión, devuelve un json con el id de la conexión eliminada como este:
+    ```json
+    {
+        "status": "success",
+        "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c"
+    }
+    ```
+
+    
+
+Otro endpoint debe ser /security_test y debe tener las siguientes funcionalidades:
+
+* /security_test/list (GET) Listar los tests de seguridad, devuelve un json con la lista de tests de seguridad como este:
+    ```json
+    {
+        "security_tests": [
+            {
+                "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+                "name": "Fortaleza de contraseña",
+                "description": "Verifica que la contraseña sea segura",
+            },
+          ...
+        ]
+    }
+    ```
+
+* /security_test/run (POST) Ejecutar un conjunto de test de seguridad, recibe el id de la conexión, y un arreglo con los id de los test de seguridad a ejecutar, devuelve un json con el resultado de los test de seguridad como este:
+    ```json
+    {   
+        "score": 0.5,
+        "security_test": [
+            {
+                "status": "success",
+                "id": "c8e9a7b6-4d3f-4a2e-9c7b-6d4d3f4a2e9c",
+                "name": "Fortaleza de contraseña",
+                "result": "warning",
+                "description": "La contraseña es muy debil, se recomienda cambiarla\nSe recomienda usar una contraseña de al menos 8 caracteres, que contenga al menos una letra mayuscula, una letra minuscula, un numero y un caracter especial"
+            },
+           ...
+        ]
+    }
+    ```
+
