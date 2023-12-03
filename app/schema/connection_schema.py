@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi_utils.api_model import APIModel
 
 
@@ -19,6 +21,10 @@ class ConnectionPost(ConnectionBase):
 
 class ConnectionPut(ConnectionBase):
     pass
+
+
+class ConnectionGet(ConnectionBase):
+    id: str
 
 
 class DBInfo(APIModel):

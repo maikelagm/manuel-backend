@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 
+from app.cruds.crud_connection import crud_connection
 from app.db.session import get_session
 from app.models.connection_model import Connection
 from app.schema.connection_schema import ConnectionPost, ConnectionEstablished
@@ -19,10 +20,13 @@ async def create_db_connection(
     )
 
     if success:
+        connection_created = crud_connection.create(db=db, obj_in=connection)
+        id = connection_created.id
         connection_established = ConnectionEstablished(
             status="success",
             db_url=connection.get_url(),
-            db_info=db_info
+            db_info=db_info,
+            id=str(connection_created.id)
         )
         return connection_established
 

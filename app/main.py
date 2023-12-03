@@ -1,7 +1,4 @@
-from contextlib import asynccontextmanager
-
 import uvicorn
-from fastapi import FastAPI
 from fastapi_offline import FastAPIOffline
 
 from app.db.init_db import create_tables, init_db

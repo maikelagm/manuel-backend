@@ -34,7 +34,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
         db.expire_on_commit = False
-        db_obj = self.model(**obj_in.model_dump())
+        db_obj = self.model(**obj_in.dict())
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)

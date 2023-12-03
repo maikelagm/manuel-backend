@@ -42,7 +42,6 @@ class DBConnectionService:
 
                 # Guarda la conexión en la base de datos de la aplicación solo si el estado es "success"
                 if db_version and db_engine:
-                    crud_connection.create(db=db, obj_in=connection)
                     print("Conexión exitosa")
                     # Importante: No es necesario commit aquí, ya que se hace en el administrador de contexto
                 else:
