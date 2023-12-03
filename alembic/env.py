@@ -14,9 +14,9 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
+# add your models's MetaData object here
 # for 'autogenerate' support
-from app. model import connection_model
+from app. models import connection_model
 target_metadata = connection_model.Base.metadata
 # target_metadata = None
 
