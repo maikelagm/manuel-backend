@@ -5,7 +5,7 @@ import uuid
 from app.db.base_class import Base
 
 
-class Connection(Base):
+class ConnectionModel(Base):
     __tablename__ = "connections"
 
     id = Column(UUIDType(binary=False), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
