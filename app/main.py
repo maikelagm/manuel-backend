@@ -3,7 +3,7 @@ from fastapi_offline import FastAPIOffline
 
 from app.db.init_db import create_tables, init_db
 from app.db.session import SessionLocal
-from router import connection_routes, security_test_routes
+from app.router import connection_routes, security_test_routes
 
 app = FastAPIOffline()
 

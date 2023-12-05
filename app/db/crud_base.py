@@ -43,7 +43,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def update(
             self,
             db: Session, *,
-            target_id: int,
+            target_id: Any,
             obj_in: UpdateSchemaType | dict[str, Any]
     ) -> ModelType:
         db.expire_on_commit = False
@@ -61,7 +61,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def remove(self, db: Session, *, id: int) -> ModelType:
+    def remove(self, db: Session, *, id: Any) -> ModelType:
         db.expire_on_commit = False
         obj = db.query(self.model).get(id)
         db.delete(obj)
