@@ -10,11 +10,3 @@ engine = create_engine(settings.SQLITE_URI, pool_pre_ping=True, echo=True)
 SessionLocal = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine)
 )
-
-
-def get_session() -> Generator:
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()

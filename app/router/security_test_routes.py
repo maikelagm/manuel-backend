@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.cruds.crud_connection import crud_connection
-from app.db.session import get_session
-from app.schema.security_test_schema import SecurityTestPost, SecurityTestResult
-from app.test.base_test import BaseTest, TestResult
+from app.cruds.crud_security_test import crud_security_test
+from app.db.deps import get_session
+from app.models.security_test_model import SecurityTestModel
+from app.services.db_tests_service import db_security_test_service
 
 from app.test.policy import TestPolicy
 from typing import List
