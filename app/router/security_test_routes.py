@@ -13,8 +13,20 @@ router = APIRouter()
 
 @router.get("/list")
 async def get_security_tests(db: Session = Depends(get_session)):
-    tests = BaseTest.test_classes.keys()
-    return list(tests)
+    try:
+        test_info = {}
+        
+        for test_name in BaseTest.test_classes.keys():
+            test_class = BaseTest.test_classes[test_name]
+            test_instance = test_class({})
+            info = test_instance.info()
+            test_info[test_name] = info
+
+        return test_info
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={"status": "error", "error_detail": str(e)})
+    
+    
 
 
 
@@ -30,6 +42,8 @@ async def run_security_test(
         connection_id = test.connection_id
         
         connection_params = crud_connection.get(db=db, id=connection_id)
+        
+        print(connection_params)
 
         for test_name in BaseTest.test_classes.keys():
             test_class = BaseTest.test_classes[test_name]

@@ -41,6 +41,10 @@ class BaseTest(with_metaclass(BaseTestMeta, object)):
         """ Obtener el nombre de la prueba de seguridad. """
         return cls.__name__()
     
+    def info(self):
+        """ Obtener información sobre la prueba de seguridad. """
+        raise NotImplementedError
+    
     def run(self, connection_params):
         """ Ejecutar la prueba de seguridad.
         
