@@ -1,22 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.cruds.crud_connection import crud_connection
-from app.cruds.crud_security_test import crud_security_test
 from app.db.deps import get_session
-from app.models.security_test_model import SecurityTestModel
-from app.services.db_tests_service import db_security_test_service
 
-from app.test.policy import TestPolicy
 from typing import List
 import datetime
 
+from app.schema.security_test_schema import SecurityTestPost
+from app.test.base_test import BaseTest, TestResult
+
 router = APIRouter()
+
 
 @router.get("/list")
 async def get_security_tests(db: Session = Depends(get_session)):
     try:
         test_info = {}
-        
+
         for test_name in BaseTest.test_classes.keys():
             test_class = BaseTest.test_classes[test_name]
             test_instance = test_class({})
@@ -26,29 +26,26 @@ async def get_security_tests(db: Session = Depends(get_session)):
         return test_info
     except Exception as e:
         raise HTTPException(status_code=500, detail={"status": "error", "error_detail": str(e)})
-    
-    
-
 
 
 @router.post("/run-select", summary="Ejecutar una prueba de seguridad")
 async def run_security_test(
-    test: SecurityTestPost,
-    db: Session = Depends(get_session)
+        test: SecurityTestPost,
+        db: Session = Depends(get_session)
 ):
     try:
         results: List[TestResult] = []
-        
+
         run_test = test.security_tests
         connection_id = test.connection_id
-        
+
         connection_params = crud_connection.get(db=db, id=connection_id)
-        
+
         print(connection_params)
 
         for test_name in BaseTest.test_classes.keys():
             test_class = BaseTest.test_classes[test_name]
-            
+
             if test_name not in run_test:
                 continue
             test_instance = test_class(connection_params)

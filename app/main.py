@@ -1,15 +1,13 @@
 import uvicorn
 from fastapi_offline import FastAPIOffline
 
+from app.auth.endpoints import users
 from app.db.init_db import init_db
 from app.db.session import SessionLocal
 from app.router import connection_routes, security_test_routes
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPIOffline()
-
-
-
 
 origins = [
     "http://localhost:5174",
