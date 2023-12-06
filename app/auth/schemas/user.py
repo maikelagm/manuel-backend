@@ -3,8 +3,6 @@ from uuid import UUID
 from fastapi_utils.api_model import APIModel
 from pydantic import EmailStr
 
-from .role import Role
-
 
 class UserBase(APIModel):
     email: EmailStr
@@ -12,7 +10,6 @@ class UserBase(APIModel):
     username: str
     name: str
     surname: str
-    role: Role
 
 
 class UserCreate(UserBase):

@@ -2,11 +2,11 @@ from fastapi import Depends, HTTPException, status
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
-from backend.core.config import settings
-from backend.core.security import reusable_oauth2, ALGORITHM
-from backend.db.deps import get_session
-from backend.modules.auth import models, crud
-from backend.modules.auth.schemas.token import TokenData
+from app.core.config import settings
+from app.core.security import reusable_oauth2, ALGORITHM
+from app.db.deps import get_session
+from app.auth import models, crud
+from app.auth.schemas.token import TokenData
 
 
 def get_current_user(

@@ -2,13 +2,13 @@ from typing import Any, Dict
 
 from sqlalchemy.orm import Session
 
-from backend.core.security import get_password_hash, verify_password
-from backend.modules.auth import schemas
-from backend.modules.auth.models import User
-from backend.utils.crud_base import CRUDBase
+from app.core.security import get_password_hash, verify_password
+from app.auth import schemas
+from app.auth.models import User
+from app.db.crud_base import CRUDBase
 
 
-class CRUDUser(CRUDBase[User, schemas.User, schemas.UserCreate, schemas.UserUpdate]):
+class CRUDUser(CRUDBase[User, schemas.UserCreate, schemas.UserUpdate]):
     @staticmethod
     def get_by_email(db: Session, *, email: str) -> User | None:
         return db.query(User).filter(User.email == email).first()
@@ -33,11 +33,11 @@ class CRUDUser(CRUDBase[User, schemas.User, schemas.UserCreate, schemas.UserUpda
         return db_obj
 
     def update(
-        self,
-        db: Session,
-        *,
-        db_obj: User,
-        obj_in: schemas.UserUpdate | Dict[str, Any]
+            self,
+            db: Session,
+            *,
+            db_obj: User,
+            obj_in: schemas.UserUpdate | Dict[str, Any]
     ) -> User:
         if isinstance(obj_in, dict):
             update_data = obj_in
@@ -50,11 +50,11 @@ class CRUDUser(CRUDBase[User, schemas.User, schemas.UserCreate, schemas.UserUpda
         return super().update(db, target_id=db_obj.id, obj_in=update_data)
 
     def authenticate(
-        self,
-        db: Session,
-        *,
-        email: str,
-        password: str
+            self,
+            db: Session,
+            *,
+            email: str,
+            password: str
     ) -> User | None:
         user = self.get_by_email(db, email=email)
         if not user:
@@ -67,9 +67,5 @@ class CRUDUser(CRUDBase[User, schemas.User, schemas.UserCreate, schemas.UserUpda
     def is_active(user: User) -> bool:
         return user.is_active
 
-    @staticmethod
-    def is_admin(user: User) -> bool:
-        return user.role == schemas.Role.admin
 
-
-user = CRUDUser(User, schemas.User)
+user = CRUDUser(User)

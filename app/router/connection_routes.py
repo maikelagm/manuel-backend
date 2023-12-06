@@ -3,7 +3,7 @@ from fastapi.params import Path
 from sqlalchemy.orm import Session
 
 from app.cruds.crud_connection import crud_connection
-from app.db.session import get_session
+from app.db.deps import get_session
 from app.models.connection_model import ConnectionModel
 from app.schema.connection_schema import ConnectionPost, ConnectionEstablished
 from app.services.db_connection_service import db_connection_service

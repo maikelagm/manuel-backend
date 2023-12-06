@@ -7,10 +7,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic.networks import EmailStr
 from sqlalchemy.orm import Session
 
-from backend.core.config import settings
-from backend.core.security import create_access_token
-from backend.modules.auth import deps, schemas, crud, models
-from backend.utils.schemas import PaginatorSchema
+from app.core.config import settings
+from app.core.security import create_access_token
+from app.auth import deps, schemas, crud, models
 
 router = APIRouter(
     tags=["auth"]
@@ -34,25 +33,25 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/users", response_model=PaginatorSchema)
+@router.get("/users", )
 def read_users(
-    db: Session = Depends(deps.get_session),
-    skip: int = 0,
-    limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_active_admin),
+        db: Session = Depends(deps.get_session),
+        skip: int = 0,
+        limit: int = 100,
+        current_user: models.User = Depends(deps.get_current_active_admin),
 ) -> Any:
     """
     Retrieve users.
     """
-    return crud.user.get_multi_paginator(db, skip=skip, limit=limit)
+    return crud.user.get_multi(db, skip=skip, limit=limit)
 
 
 @router.post("/users", response_model=schemas.User)
 def create_user(
-    *,
-    db: Session = Depends(deps.get_session),
-    user_in: schemas.UserCreate,
-    current_user: models.User = Depends(deps.get_current_active_admin),
+        *,
+        db: Session = Depends(deps.get_session),
+        user_in: schemas.UserCreate,
+        current_user: models.User = Depends(deps.get_current_active_admin),
 ) -> Any:
     """
     Create new user.
@@ -69,12 +68,12 @@ def create_user(
 
 @router.put("/users/me", response_model=schemas.User)
 def update_user_me(
-    *,
-    db: Session = Depends(deps.get_session),
-    password: str = Body(None),
-    full_name: str = Body(None),
-    email: EmailStr = Body(None),
-    current_user: models.User = Depends(deps.get_current_active_user),
+        *,
+        db: Session = Depends(deps.get_session),
+        password: str = Body(None),
+        full_name: str = Body(None),
+        email: EmailStr = Body(None),
+        current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Update own user.
@@ -93,7 +92,7 @@ def update_user_me(
 
 @router.get("/users/me", response_model=schemas.User)
 def read_user_me(
-    current_user: models.User = Depends(deps.get_current_active_user),
+        current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Get current user.
@@ -103,9 +102,9 @@ def read_user_me(
 
 @router.get("/users/{user_id}", response_model=schemas.User)
 def read_user_by_id(
-    user_id: str,
-    current_user: models.User = Depends(deps.get_current_active_user),
-    db: Session = Depends(deps.get_session),
+        user_id: str,
+        current_user: models.User = Depends(deps.get_current_active_user),
+        db: Session = Depends(deps.get_session),
 ) -> Any:
     """
     Get a specific user by id.
@@ -122,11 +121,11 @@ def read_user_by_id(
 
 @router.put("/users/{user_id}", response_model=schemas.User)
 def update_user(
-    *,
-    db: Session = Depends(deps.get_session),
-    user_id: str,
-    user_in: schemas.UserUpdate,
-    current_user: models.User = Depends(deps.get_current_active_admin),
+        *,
+        db: Session = Depends(deps.get_session),
+        user_id: str,
+        user_in: schemas.UserUpdate,
+        current_user: models.User = Depends(deps.get_current_active_admin),
 ) -> Any:
     """
     Update a user.
@@ -143,10 +142,10 @@ def update_user(
 
 @router.delete("/users/{user_id}", response_model=schemas.User)
 def delete_user(
-    *,
-    db: Session = Depends(deps.get_session),
-    user_id: str,
-    _: models.User = Depends(deps.get_current_active_admin),
+        *,
+        db: Session = Depends(deps.get_session),
+        user_id: str,
+        _: models.User = Depends(deps.get_current_active_admin),
 ) -> Any:
     """
     Delete a user.
